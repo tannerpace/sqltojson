@@ -30,7 +30,7 @@ Create a .env file in the project root and add your database credentials:
 npm install
 ```
 ```bash
-echo 'DB_HOST=localhost DB_USER=username DB_PASSWORD=password DB_DATABASE=database_name' > .env
+echo -e "DB_HOST=localhost\nDB_USER=username\nDB_PASSWORD=password\nDB_DATABASE=database_name" > .env
 ```
 Usage
 Run the script:
