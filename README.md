@@ -25,26 +25,19 @@ git clone https://github.com/tannerpace/sqltojson.git
 cd sqltojson
 Install dependencies:
 ```
-bash
-Copy
-Edit
-npm install
 Create a .env file in the project root and add your database credentials:
-
-env
-Copy
-Edit
-DB_HOST=localhost
-DB_USER=username
-DB_PASSWORD=password
-DB_DATABASE=database_name
+```bash
+npm install
+```
+```bash
+echo 'DB_HOST=localhost DB_USER=username DB_PASSWORD=password DB_DATABASE=database_name' > .env
+```
 Usage
 Run the script:
 
-bash
-Copy
-Edit
+```bash
 node sqlToJson.js
+```
 The script will:
 
 Connect to the specified database.
