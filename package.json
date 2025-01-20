@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tannerpace/sqltojson.git"
+    "url": "git+https://github.com/tannerpace/sqltojson.git"
   },
   "keywords": [
     "mysql",
