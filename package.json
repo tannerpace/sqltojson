@@ -1,6 +1,6 @@
 {
   "name": "dbtojson",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Export MySQL tables to JSON and generate TypeScript types",
   "main": "index.js",
   "bin": {
