@@ -3,17 +3,19 @@ const fs = require('fs');
 require('dotenv').config();
 
 /**
- * Exports all tables from the connected MySQL database to a JSON file.
+ * Exports all tables from the connected MySQL database to a JSON file and generates TypeScript types.
  * 
  * This function connects to the MySQL database using the credentials provided 
  * in the `.env` file, retrieves all table names, fetches their data, and writes 
  * the data to a JSON file named `database_export.json` in the current directory.
+ * It also generates TypeScript type definitions for the tables based on their structure 
+ * and saves them to a `database_types.d.ts` file.
  * 
  * @async
- * @function exportAllTablesToJson
- * @returns {Promise<void>} Resolves when the data export is complete.
+ * @function exportAllTablesWithTypes
+ * @returns {Promise<void>} Resolves when the data export and type generation are complete.
  */
-const exportAllTablesToJson = async () => {
+const exportAllTablesWithTypes = async () => {
   try {
     // Establish connection to the database
     const connection = await mysql.createConnection({
@@ -28,19 +30,37 @@ const exportAllTablesToJson = async () => {
     const tableKey = Object.keys(tables[0])[0];
 
     const databaseContent = {};
+    const typeDefinitions = [];
 
-    // Loop through each table and fetch its data
+    // Loop through each table and fetch its data and metadata
     for (const table of tables) {
       const tableName = table[tableKey];
       console.log(`Exporting table: ${tableName}`);
+
+      // Fetch all rows of the table
       const rows = await connection.query(`SELECT * FROM ${tableName}`);
       databaseContent[tableName] = rows;
+
+      // Fetch the table column information for type generation
+      const columns = await connection.query(`SHOW COLUMNS FROM ${tableName}`);
+      const fields = columns.map(column => {
+        const tsType = mapMysqlTypeToTypeScript(column.Type);
+        const optional = column.Null === 'YES' ? '?' : '';
+        return `  ${column.Field}${optional}: ${tsType};`;
+      });
+      const typeDef = `export interface ${capitalize(tableName)} {\n${fields.join('\n')}\n}`;
+      typeDefinitions.push(typeDef);
     }
 
     // Write the collected data to a JSON file
-    const fileName = 'database_export.json';
-    fs.writeFileSync(fileName, JSON.stringify(databaseContent, null, 2), 'utf8');
-    console.log(`All table data has been exported to ${fileName}`);
+    const jsonFileName = 'database_export.json';
+    fs.writeFileSync(jsonFileName, JSON.stringify(databaseContent, null, 2), 'utf8');
+    console.log(`All table data has been exported to ${jsonFileName}`);
+
+    // Write the TypeScript type definitions to a .d.ts file
+    const typesFileName = 'database_types.d.ts';
+    fs.writeFileSync(typesFileName, typeDefinitions.join('\n\n'), 'utf8');
+    console.log(`TypeScript types have been exported to ${typesFileName}`);
 
     // Close the database connection
     await connection.end();
@@ -49,4 +69,34 @@ const exportAllTablesToJson = async () => {
   }
 };
 
-exportAllTablesToJson();
+/**
+ * Maps MySQL column types to TypeScript types.
+ * 
+ * @param {string} mysqlType - The MySQL column type.
+ * @returns {string} The corresponding TypeScript type.
+ */
+const mapMysqlTypeToTypeScript = (mysqlType) => {
+  if (mysqlType.startsWith('int') || mysqlType.startsWith('decimal') || mysqlType.startsWith('float') || mysqlType.startsWith('double')) {
+    return 'number';
+  }
+  if (mysqlType.startsWith('varchar') || mysqlType.startsWith('text') || mysqlType.startsWith('char')) {
+    return 'string';
+  }
+  if (mysqlType.startsWith('date') || mysqlType.startsWith('timestamp')) {
+    return 'Date';
+  }
+  if (mysqlType.startsWith('tinyint(1)')) {
+    return 'boolean';
+  }
+  return 'any'; // Fallback for unsupported types
+};
+
+/**
+ * Capitalizes the first letter of a string.
+ * 
+ * @param {string} str - The input string.
+ * @returns {string} The capitalized string.
+ */
+const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
+exportAllTablesWithTypes();
