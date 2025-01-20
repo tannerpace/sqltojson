@@ -25,19 +25,24 @@ git clone https://github.com/tannerpace/sqltojson.git
 cd sqltojson
 Install dependencies:
 ```
+
 Create a .env file in the project root and add your database credentials:
+
 ```bash
 npm install
 ```
+
 ```bash
 echo -e "DB_HOST=localhost\nDB_USER=username\nDB_PASSWORD=password\nDB_DATABASE=database_name" > .env
 ```
+
 Usage
 Run the script:
 
 ```bash
 node sqlToJson.js
 ```
+
 The script will:
 
 Connect to the specified database.
@@ -51,46 +56,50 @@ Generating type definitions.
 Output Format
 The output file, database_export.json, contains a JSON object where each key is a table name and its value is an array of rows from that table:
 
-json
-Copy
-Edit
+```json
 {
-"users": [
-{ "id": 1, "username": "user1" },
-{ "id": 2, "username": "user2" }
-],
-"locations": [
-{ "id": 1, "name": "Location A" },
-{ "id": 2, "name": "Location B" }
-]
+  "users": [
+    { "id": 1, "username": "user1" },
+    { "id": 2, "username": "user2" }
+  ],
+  "locations": [
+    { "id": 1, "name": "Location A" },
+    { "id": 2, "name": "Location B" }
+  ]
 }
-Advanced Features
-Generating Type Definitions
+```
+
+## Advanced Features
+
+### Generating Type Definitions
+
 The exported JSON file can serve as the basis for generating types or interfaces for languages like TypeScript. For example:
 
 Use tools like quicktype to generate TypeScript types from database_export.json.
 Example TypeScript interface generated for the users table:
-typescript
-Copy
-Edit
+
+```typescript
 interface User {
-id: number;
-username: string;
+  id: number
+  username: string
 }
-Serverless Transition
+```
+
+## Serverless Transition
+
 Replace database queries with the JSON file in serverless environments like Vercel, AWS Lambda, or Netlify Functions.
 Example: Import and use the JSON file in your API routes:
-javascript
-Copy
-Edit
-const data = require('./database_export.json');
+
+```javascript
+const data = require("./database_export.json")
 
 const getUsers = () => {
-return data.users; // Access the users table data
-};
+  return data.users
+}
+```
 
-console.log(getUsers());
-Data Visualization
+### Data Visualization
+
 Integrate the JSON file with tools or libraries like D3.js or Plotly to create visual representations of your data.
 Example Workflow
 Extract Data: Run the script to generate database_export.json.
