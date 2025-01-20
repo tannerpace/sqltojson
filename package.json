@@ -1,30 +1,30 @@
 {
-  "dependencies": {
-    "dotenv": "^16.4.7",
-    "mysql2": "^3.12.0",
-    "promise-mysql": "^5.2.0"
-  },
   "name": "dbtojson",
   "version": "1.0.0",
-  "description": "export your sql database to a single json object",
-  "main": "sqlToJson.js",
+  "description": "Export MySQL tables to JSON and generate TypeScript types",
+  "main": "index.js",
+  "bin": {
+    "dbtojson": "./sqltojson.js"
+  },
   "scripts": {
-    "test": "npm test"
+    "start": "node sqltojson.js",
+    "postinstall": "node sqltojson.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tannerpace/sqltojson.git"
+    "url": "https://github.com/tannerpace/sqltojson.git"
   },
   "keywords": [
     "mysql",
     "json",
-    "export",
+    "typescript",
     "database"
   ],
-  "author": "Tanner B",
+  "author": "Your Name",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/tannerpace/sqltojson/issues"
-  },
-  "homepage": "https://github.com/tannerpace/sqltojson#readme"
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "mysql2": "^3.12.0",
+    "promise-mysql": "^5.2.0"
+  }
 }

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const mysql = require('promise-mysql');
 const fs = require('fs');
 require('dotenv').config();
@@ -16,8 +17,14 @@ require('dotenv').config();
  * @returns {Promise<void>} Resolves when the data export and type generation are complete.
  */
 const exportAllTablesWithTypes = async () => {
+
   try {
-    // Establish connection to the database
+
+    if (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_PASSWORD || !process.env.DB_DATABASE) {
+      console.error('Database configuration is missing in .env file.');
+      return process.exit(1);
+    }
+
     const connection = await mysql.createConnection({
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
