@@ -7,8 +7,7 @@
     "dbtojson": "./sqltojson.js"
   },
   "scripts": {
-    "start": "node sqltojson.js",
-    "postinstall": "node sqltojson.js"
+    "start": "node sqltojson.js"
   },
   "repository": {
     "type": "git",
