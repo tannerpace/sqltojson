@@ -21,8 +21,6 @@ Installation
 Clone this repository:
 
 ```bash
-Copy
-Edit
 git clone https://github.com/tannerpace/sqltojson.git
 cd sqltojson
 Install dependencies:
