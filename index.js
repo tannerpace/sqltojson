@@ -1,7 +1,25 @@
 #!/usr/bin/env node
+const path = require('path');
 const mysql = require('promise-mysql');
 const fs = require('fs');
-require('dotenv').config();
+require('dotenv').config({ path: path.resolve(process.cwd(), '.env') });
+
+const REQUIRED_ENV_VARS = ['DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_DATABASE'];
+
+/**
+ * Validates the required environment variables and logs missing ones.
+ * @returns {boolean} - Returns true if all variables are present; false otherwise.
+ */
+const validateEnvVars = () => {
+  const missingVars = REQUIRED_ENV_VARS.filter((varName) => !process.env[varName]);
+  if (missingVars.length > 0) {
+    console.error('The following environment variables are missing in the .env file:');
+    missingVars.forEach((varName) => console.error(`  - ${varName}`));
+    console.error('Please ensure your .env file includes all required variables.');
+    return false;
+  }
+  return true;
+};
 
 /**
  * Exports all tables from the connected MySQL database to a JSON file and generates TypeScript types.
@@ -16,7 +34,12 @@ require('dotenv').config();
  * @function exportAllTablesWithTypes
  * @returns {Promise<void>} Resolves when the data export and type generation are complete.
  */
+
 const exportAllTablesWithTypes = async () => {
+  if (!validateEnvVars()) {
+    console.log('Expected .env file in:', process.cwd());
+    return process.exit(1);
+  }
 
   try {
 
