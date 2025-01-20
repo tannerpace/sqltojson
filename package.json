@@ -4,7 +4,7 @@
     "mysql2": "^3.12.0",
     "promise-mysql": "^5.2.0"
   },
-  "name": "sqltojson",
+  "name": "dbtojson",
   "version": "1.0.0",
   "description": "export your sql database to a single json object",
   "main": "sqlToJson.js",
