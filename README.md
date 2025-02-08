@@ -1,3 +1,11 @@
+The instructions on the NPM website are out of date All you need to do is install this in your project and then run the command dbtojson from your terminal.
+
+```
+npm install dbtojson && dbtojson
+```
+ 
+
+
 # sqltojson
 
 **sqltojson** is a Node.js utility designed to export data from a MySQL database into a single JSON file and generate TypeScript type definitions for the database schema. This tool is particularly useful for projects transitioning from traditional SQL-based architectures to serverless, object-oriented, or JSON-based systems. It can also be leveraged for data visualization, schema documentation, or ensuring type safety in TypeScript-based applications.
